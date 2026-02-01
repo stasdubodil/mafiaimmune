@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Презентация: Вирусы - 5 класс</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #7c3aed;
+            --primary-light: #a78bfa;
+            --primary-dark: #5b21b6;
+            --secondary: #ddd6fe;
+            --surface: rgba(255, 255, 255, 0.9);
+            --text: #1f2937;
+            --text-light: #6b7280;
+            --success: #10b981;
+            --error: #ef4444;
+            --shadow-light: 0 8px 32px rgba(0, 0, 0, 0.08);
+            --shadow-dark: 0 8px 32px rgba(0, 0, 0, 0.12);
+        }
+
+        body {
+            color: var(--text);
+            min-height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 30%, #c4b5fd 60%, #ddd6fe 90%, #f5f3ff 100%);
+            background-attachment: fixed;
+        }
+
+        .presentation-container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .header {
+            padding: 12px 25px;
+            background: var(--surface);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-light);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .header h1 {
+            color: var(--primary-dark);
+            font-size: 1.5rem;
+        }
+
+        .timer {
+            padding: 6px 15px;
+            background: var(--surface);
+            border-radius: 50px;
+            box-shadow: var(--shadow-light);
+            font-weight: bold;
+            color: var(--primary);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 0.9rem;
+        }
+
+        .slides-container {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: transform 0.6s ease, opacity 0.6s ease;
+            pointer-events: none;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: all;
+        }
+
+        .slide.previous {
+            transform: translateX(-100%);
+        }
+
+        .slide-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 97%;
+            padding: 25px;
+            background: var(--surface);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            box-shadow: var(--shadow-light);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            height: 82vh;
+            max-height: 82vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(124, 58, 237, 0.03) 0%, 
+                rgba(167, 139, 250, 0.03) 100%);
+            z-index: -1;
+            border-radius: 24px;
+        }
+
+        .slide-title {
+            color: var(--primary-dark);
+            font-size: 2rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-height: 50px;
+        }
+
+        .slide-title .emoji {
+            color: var(--primary-light);
+            font-size: 2.2rem;
+        }
+
+        .slide-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-right: 15px;
+            box-shadow: 0 4px 8px rgba(124, 58, 237, 0.3);
+            flex-shrink: 0;
+        }
+
+        .slide-body {
+            font-size: 1.2rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        .slide-body::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .slide-body::-webkit-scrollbar-track {
+            background: rgba(124, 58, 237, 0.05);
+            border-radius: 8px;
+        }
+
+        .slide-body::-webkit-scrollbar-thumb {
+            background: var(--primary-light);
+            border-radius: 8px;
+        }
+
+        .slide-body p {
+            margin-bottom: 15px;
+        }
+
+        .slide-body ul, .slide-body ol {
+            padding-left: 25px;
+            margin-bottom: 15px;
+        }
+
+        .slide-body li {
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .slide-body li:before {
+            content: "•";
+            color: var(--primary);
+            font-weight: bold;
+            position: absolute;
+            left: -15px;
+            top: 0;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, rgba(124, 58, 237, 0.05) 0%, rgba(124, 58, 237, 0.1) 100%);
+            padding: 15px;
+            border-radius: 16px;
+            border-left: 4px solid var(--primary);
+            margin: 15px 0;
+            font-size: 1.1rem;
+            backdrop-filter: blur(5px);
+        }
+
+        .highlight p {
+            margin: 0;
+        }
+
+        .emoji-large {
+            font-size: 2.5rem;
+            margin: 0 5px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .virus-icon {
+            font-size: 2rem;
+            margin: 5px;
+            display: inline-block;
+        }
+
+        .virus-icon-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(124, 58, 237, 0.03);
+            border-radius: 16px;
+            border: 1px solid rgba(124, 58, 237, 0.1);
+        }
+
+        .gallery-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 8px;
+            padding-bottom: 8px;
+        }
+
+        .gallery-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .gallery-container::-webkit-scrollbar-track {
+            background: rgba(124, 58, 237, 0.05);
+            border-radius: 8px;
+        }
+
+        .gallery-container::-webkit-scrollbar-thumb {
+            background: var(--primary-light);
+            border-radius: 8px;
+        }
+
+        .photo-upload {
+            height: 160px;
+            background: linear-gradient(135deg, rgba(221, 214, 254, 0.6) 0%, rgba(255, 255, 255, 0.8) 100%);
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px dashed var(--primary-light);
+            color: var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .photo-upload:hover {
+            background: linear-gradient(135deg, rgba(167, 139, 250, 0.4) 0%, rgba(255, 255, 255, 0.9) 100%);
+            transform: scale(1.02);
+        }
+
+        .photo-upload .emoji {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+        }
+
+        .photo-upload span {
+            font-size: 1rem;
+            font-weight: bold;
+            text-align: center;
+            padding: 0 8px;
+        }
+
+        .upload-input {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .uploaded-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 14px;
+            display: none;
+        }
+
+        .uploaded .uploaded-photo {
+            display: block;
+        }
+
+        .uploaded .upload-icon, .uploaded .upload-text {
+            display: none;
+        }
+
+        .quiz-container {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        .question {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(124, 58, 237, 0.2);
+        }
+
+        .question h3 {
+            margin-bottom: 15px;
+            color: var(--primary-dark);
+            font-size: 1.4rem;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            padding: 12px 20px;
+            background: var(--surface);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .option:hover {
+            background: rgba(124, 58, 237, 0.08);
+            border-color: var(--primary-light);
+        }
+
+        .option.selected {
+            background: rgba(124, 58, 237, 0.12);
+            border-color: var(--primary);
+            font-weight: bold;
+        }
+
+        .option.correct {
+            background: rgba(16, 185, 129, 0.12);
+            border-color: var(--success);
+        }
+
+        .option.incorrect {
+            background: rgba(239, 68, 68, 0.12);
+            border-color: var(--error);
+        }
+
+        .option-emoji {
+            font-size: 1.4rem;
+        }
+
+        .quiz-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border-radius: 12px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 8px rgba(124, 58, 237, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(124, 58, 237, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--surface);
+            color: var(--primary);
+            border: 1px solid var(--primary-light);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(124, 58, 237, 0.08);
+        }
+
+        .result {
+            text-align: center;
+            padding: 25px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.05) 0%, rgba(167, 139, 250, 0.05) 100%);
+            margin-top: 20px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(5px);
+        }
+
+        .result h2 {
+            color: var(--primary-dark);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .score {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            height: 20px;
+            background: var(--surface);
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-light), var(--primary));
+            border-radius: 10px;
+            width: 0%;
+            transition: width 1s ease;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 25px 15px;
+            align-items: center;
+        }
+
+        .nav-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--surface);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            color: var(--primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-light);
+        }
+
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-dark);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .nav-btn:disabled:hover {
+            background: var(--surface);
+            color: var(--primary);
+            transform: none;
+            box-shadow: var(--shadow-light);
+        }
+
+        .slide-indicators {
+            display: flex;
+            gap: 10px;
+        }
+
+        .slide-indicator {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--surface);
+            border: 2px solid var(--primary-light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .slide-indicator.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            transform: scale(1.2);
+        }
+
+        .slide-indicator:hover {
+            background: var(--primary-light);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Анимация появления контента */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 1600px) {
+            .slide-title {
+                font-size: 1.8rem;
+            }
+            
+            .slide-body {
+                font-size: 1.1rem;
+            }
+            
+            .gallery-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .slide-title {
+                font-size: 1.6rem;
+            }
+            
+            .slide-number {
+                width: 45px;
+                height: 45px;
+                font-size: 1.2rem;
+            }
+            
+            .slide-body {
+                font-size: 1rem;
+            }
+            
+            .gallery-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .option {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.2rem;
+            }
+            
+            .slide-title {
+                font-size: 1.4rem;
+            }
+            
+            .slide-number {
+                width: 40px;
+                height: 40px;
+                font-size: 1.1rem;
+            }
+            
+            .slide-content {
+                padding: 20px;
+                height: 78vh;
+            }
+            
+            .slide-body {
+                font-size: 0.95rem;
+            }
+            
+            .gallery-container {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .photo-upload {
+                height: 140px;
+            }
+            
+            .quiz-buttons {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .nav-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.3rem;
+            }
+        }
+
+        @media (max-height: 800px) {
+            .slide-content {
+                height: 78vh;
+                padding: 20px;
+            }
+            
+            .slide-title {
+                font-size: 1.5rem;
+                margin-bottom: 15px;
+            }
+            
+            .slide-body {
+                font-size: 1rem;
+            }
+            
+            .photo-upload {
+                height: 130px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <div class="header">
+            <h1>Презентация: Вирусы - невидимые захватчики</h1>
+            <div class="timer">Время: <span id="minutes">45</span>:<span id="seconds">00</span></div>
+        </div>
+        
+        <div class="slides-container">
+            <!-- Слайд 1: Титульный -->
+            <div class="slide active" id="slide1">
+                <div class="slide-content">
+                    <h1 class="slide-title">
+                        <span class="slide-number">1</span>
+                        Вирусы: невидимые захватчики
+                    </h1>
+                    <div class="slide-body animate-in">
+                        <p>Интерактивная презентация по биологии для 5 класса</p>
+                        <div class="highlight">
+                            <p>Продолжительность урока: 45 минут</p>
+                        </div>
+                        <p>В этой презентации вы узнаете:</p>
+                        <ul>
+                            <li>Что такое вирусы и чем они отличаются от других организмов</li>
+                            <li>Как устроены вирусы и как они размножаются</li>
+                            <li>Какие бывают вирусы и как они влияют на живые организмы</li>
+                            <li>Как защититься от вирусных заболеваний</li>
+                        </ul>
+                        
+                        <div class="virus-icon-container">
+                            <span class="virus-icon">🦠</span>
+                            <span class="virus-icon">🧬</span>
+                            <span class="virus-icon">🔬</span>
+                        </div>
+                        
+                        <p>Для навигации используйте кнопки внизу или клавиши ← → на клавиатуре</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Слайд 2: Что такое вирусы -->
+            <div class="slide" id="slide2">
+                <div class="slide-content">
+                    <h1 class="slide-title">
+                        <span class="slide-number">2</span>
+                        Что такое вирусы?
+                    </h1>
+                    <div class="slide-body animate-in">
+                        <p>Вирусы - это самые маленькие и простые формы жизни на Земле. Они настолько малы, что их можно увидеть только в электронный микроскоп.</p>
+                        
+                        <div class="highlight">
+                            <p><strong>Интересный факт:</strong> слово "вирус" происходит от латинского слова, означающего "яд" или "слизистая жидкость".</p>
+                        </div>
+                        
+                        <p>Вирусы не являются настоящими живыми организмами, потому что они:</p>
+                        <ul>
+                            <li><strong>Не могут размножаться самостоятельно</strong> - им нужна живая клетка</li>
+                            <li><strong>Не питаются и не дышат</strong> - у них нет обмена веществ</li>
+                            <li><strong>Не растут и не развиваются</strong> - они просто собираются из готовых частей</li>
+                            <li><strong>Не реагируют на изменения окружающей среды</strong> - у них нет раздражимости</li>
+                        </ul>
+                        
+                        <p>Однако, когда вирус попадает в живую клетку, он "оживает" и начинает размножаться, используя ресурсы клетки.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Слайд 3: Строение вируса -->
+            <div class="slide" id="slide3">
+                <div class="slide-content">
+                    <h1 class="slide-title">
+                        <span class="slide-number">3</span>
+                        Строение вируса
+                    </h1>
+                    <div class="slide-body animate-in">
+                        <p>Вирусы имеют очень простое строение. Большинство вирусов состоят из:</p>
+                        <ul>
+                            <li><strong>Генетического материала (ДНК или РНК)</strong> - содержит инструкции для создания новых вирусов</li>
+                            <li><strong>Белковой оболочки (капсида)</strong> - защищает генетический материал</li>
+                            <li><strong>Дополнительной оболочки</strong> (есть не у всех вирусов) - помогает вирусу проникать в клетки</li>
+                        </ul>
+                        
+                        <div class="highlight">
+                            <p>Вирусы бывают разной формы: шарообразные, палочковидные, в виде спирали или многогранника. Форма зависит от строения белковой оболочки.</p>
+                        </div>
+                        
+                        <p><strong>Примеры:</strong></p>
+                        <ul>
+                            <li>Вирус гриппа - сферической формы</li>
+                            <li>Вирус табачной мозаики - палочковидной формы</li>
+                            <li>Бактериофаг - сложная форма с "ножками"</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Слайд 4: Размножение вирусов -->
+            <div class="slide" id="slide4">
+                <div class="slide-content">
+                    <h1 class="slide-title">
+                        <span class="slide-number">4</span>
+                        Как вирусы размножаются?
+                    </h1>
+                    <div class="slide-body animate-in">
+                        <p>Вирусы могут размножаться только внутри живых клеток. Этот процесс называется <strong>репликацией</strong> и состоит из нескольких этапов:</p>
+                        <ol>
+                            <li><strong>Прикрепление</strong> - вирус прикрепляется к поверхности клетки</li>
+                            <li><strong>Проникновение</strong> - вирус впрыскивает свой генетический материал в клетку</li>
+                            <li><strong>Размножение</strong> - клетка начинает производить новые вирусные частицы</li>
+                            <li><strong>Сборка</strong> - новые вирусы собираются внутри клетки</li>
+                            <li><strong>Выход</strong> - новые вирусы покидают клетку, часто разрушая её</li>
+                        </ol>
+                        
+                        <p>Клетка, зараженная вирусом, становится "фабрикой" по производству новых вирусов. После выхода вирусов клетка часто погибает.</p>
+                        
+                        <div class="highlight">
+                            <p><strong>Это интересно:</strong> один вирус может создать внутри клетки сотни своих копий всего за несколько часов!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Слайд 5: Виды вирусов -->
+            <div class="slide" id="slide5">
+                <div class="slide-content">
+                    <h1 class="slide-title">
+                        <span class="slide-number">5</span>
+                        Какие бывают вирусы?
+                    </h1>
+                    <div class="slide-body animate-in">
+                        <p>Вирусы могут заражать все виды живых организмов: животных, растения, бактерии и даже другие вирусы!</p>
+                        
+                        <div class="highlight">
+                            <p><strong>Бактериофаги</strong> - вирусы, которые заражают бактерии. Они могут быть полезными для человека, так как помогают бороться с бактериальными инфекциями.</p>
+                        </div>
+                        
+                        <p><strong>Вирусы животных и человека:</strong></p>
+                        <ul>
+                            <li><strong>Вирус гриппа</strong> - вызывает заболевание дыхательных путей</li>
+                            <li><strong>ВИЧ</strong> - поражает иммунную систему</li>
+                            <li><strong>Вирус бешенства</strong> - поражает нервную систему</li>
+                            <li><strong>Вирус кори</strong> - вызывает детское инфекционное заболевание</li>
+                        </ul>
+                        
+                        <p><strong>Вирусы растений:</strong></p>
+                        <ul>
+                            <li><strong>Вирус табачной мозаики</strong> - поражает табак и другие растения</li>
+                            <li><strong>Вирус кольцевой пятнистости томата</strong> - поражает томаты и другие культуры</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Слайд 6: Галерея вирусов -->
+            <div class="slide" id="slide6">
+                <div class="slide-content">
+                    <h1 class="slide-title">
+                        <span class="slide-number">6</span>
+                        Галерея вирусов
+                    </h1>
+                    <div class="slide-body">
+                        <p>Нажмите на элементы ниже, чтобы загрузить фотографии вирусов. Выберите изображения с вашего компьютера.</p>
+                        
+                        <div class="gallery-container" id="gallery">
+                            <div class="photo-upload" id="photo1">
+                                <div class="upload-icon">
+                                    <span class="emoji">🦠</span>
+                                </div>
+                                <div class="upload-text">
+                                    <span>Вирус гриппа</span>
+                                </div>
+                                <input type="file" class="upload-input" accept="image/*" onchange="handlePhotoUpload(this, 'photo1')">
+                                <img class="uploaded-photo" alt="Загруженное изображение">
+                            </div>
+                            
+                            <div class="photo-upload" id="photo2">
+                                <div class="upload-icon">
+                                    <span class="emoji">🧫</span>
+                                </div>
+                                <div class="upload-text">
+                                    <span>Бактериофаг</span>
+                                </div>
+                                <input type="file" class="upload-input" accept="image/*" onchange="handlePhotoUpload(this, 'photo2')">
+                                <img class="uploaded-photo" alt="Загруженное изображение">
+                            </div>
+                            
+                            <div class="photo-upload" id="photo3">
+                                <div class="upload-icon">
+                                    <span class="emoji">🔬</span>
+                                </div>
+                                <div class="upload-text">
+                                    <span>ВИЧ</span>
+                                </div>
+                                <input type="file" class="upload-input" accept="image/*" onchange="handlePhotoUpload(this, 'photo3')">
+                                <img class="uploaded-photo" alt="Загруженное изображение">
+                            </div>
+                            
+                            <div class="photo-upload" id="photo4">
+                                <div class="upload-icon">
+                                    <span class="emoji">👑</span>
+                                </div>
+                                <div class="upload-text">
+                                    <span>Коронавирус</span>
+                                </div>
+                                <input type="file" class="upload-input" accept="image/*" onchange="handlePhotoUpload(this, 'photo4')">
+                                <img class="uploaded-photo" alt="Загруженное изображение">
+                            </div>
+                            
+                            <div class="photo-upload" id="photo5">
+                                <div class="upload-icon">
+                                    <span class="emoji">💊</span>
+                                </div>
+                                <div class="upload-text">
+                                    <span>Вирус герпеса</span>
+                                </div>
+                                <input type="file" class="upload-input" accept="image/*" onchange="handlePhotoUpload(this, 'photo5')">
+                                <img class="uploaded-photo" alt="Загруженное изображение">
+                            </div>
+                            
+                            <div class="photo-upload" id="photo6">
+                                <div class="upload-icon">
+                                    <span class="emoji">💉</span>
+                                </div>
+                                <div class="upload-text">
+                                    <span>Вирус оспы</span>
+                                </div>
+                                <input type="file" class="upload-input" accept="image/*" onchange="handlePhotoUpload(this, 'photo6')">
+                                <img class="uploaded-photo" alt="Загруженное изображение">
+                            </div>
+                            
+                            <div class="photo-upload" id="photo7">
+                                <div class="upload-icon">
+                                    <span class="emoji">🌿</span>
+                                </div>
+                                <div class="upload-text">
+                                    <span>Вирус растений</span>
+                                </div>
+                                <input type="file" class="upload-input" accept="image/*" onchange="handlePhotoUpload(this, 'photo7')">
+                                <img class="uploaded-photo" alt="Загруженное изображение">
+                            </div>
+                            
+                            <div class="photo-upload" id="photo8">
+                                <div class="upload-icon">
+                                    <span class="emoji">🧬</span>
+                                </div>
+                                <div class="upload-text">
+                                    <span>Структура вируса</span>
+                                </div>
+                                <input type="file" class="upload-input" accept="image/*" onchange="handlePhotoUpload(this, 'photo8')">
+                                <img class="uploaded-photo" alt="Загруженное изображение">
+                            </div>
+                        </div>
+                        
+                        <div class="highlight" style="margin-top: 15px;">
+                            <p>Загруженные фотографии сохранятся до перезагрузки страницы. Для сброса загруженных фото обновите страницу.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Слайд 7: Интересные факты -->
+            <div class="slide" id="slide7">
+                <div class="slide-content">
+                    <h1 class="slide-title">
+                        <span class="slide-number">7</span>
+                        Интересные факты о вирусах
+                    </h1>
+                    <div class="slide-body animate-in">
+                        <div class="highlight">
+                            <p><strong>Вирусы вездесущи:</strong> в одном миллилитре морской воды может содержаться до 10 миллионов вирусов! В организме человека постоянно находится около 380 триллионов вирусов.</p>
+                        </div>
+                        
+                        <p><strong>Гигантские вирусы:</strong> большинство вирусов очень маленькие, но существуют и гигантские вирусы, которые можно увидеть в обычный световой микроскоп. Например, вирус мимивирус имеет размер около 0,7 микрометра.</p>
+                        
+                        <div class="highlight">
+                            <p><strong>Вирусы и эволюция:</strong> ученые считают, что вирусы сыграли важную роль в эволюции живых организмов. Некоторые гены в нашем ДНК имеют вирусное происхождение.</p>
+                        </div>
+                        
+                        <p><strong>Полезные вирусы:</strong> не все вирусы вредны. Некоторые вирусы помогают регулировать популяции организмов, а бактериофаги используются в медицине для борьбы с бактериальными инфекциями.</p>
+                        
+                        <p><strong>Вирусы в космосе:</strong> ученые обнаружили, что некоторые вирусы могут выживать в экстремальных условиях, включая космическое пространство.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Слайд 8: Защита от вирусов -->
+            <div class="slide" id="slide8">
+                <div class="slide-content">
+                    <h1 class="slide-title">
+                        <span class="slide-number">8</span>
+                        Защита от вирусов
+                    </h1>
+                    <div class="slide-body animate-in">
+                        <p>Организм человека защищается от вирусов с помощью иммунной системы:</p>
+                        <ul>
+                            <li><strong>Кожи и слизистых оболочек</strong> - физический барьер</li>
+                            <li><strong>Иммунных клеток</strong> - обнаруживают и уничтожают вирусы</li>
+                            <li><strong>Антител</strong> - специальные белки, которые нейтрализуют вирусы</li>
+                            <li><strong>Интерферонов</strong> - белки, которые мешают вирусам размножаться</li>
+                        </ul>
+                        
+                        <div class="highlight">
+                            <p>Когда вирус попадает в организм, иммунная система запоминает его и при повторном попадании реагирует быстрее и эффективнее. Это основа иммунитета.</p>
+                        </div>
+                        
+                        <p>Люди также создали способы защиты от вирусов:</p>
+                        <ul>
+                            <li><strong>Вакцины</strong> - учат иммунную систему бороться с вирусами</li>
+                            <li><strong>Противовирусные препараты</strong> - мешают вирусам размножаться</li>
+                            <li><strong>Гигиена</strong> - мытье рук, ношение масок, дезинфекция</li>
+                            <li><strong>Карантин</strong> - изоляция больных для предотвращения распространения вируса</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Слайд 9: Тест -->
+            <div class="slide" id="slide9">
+                <div class="slide-content">
+                    <h1 class="slide-title">
+                        <span class="slide-number">9</span>
+                        Проверь свои знания
+                    </h1>
+                    <div class="slide-body">
+                        <p>Ответьте на 5 вопросов, чтобы проверить, что вы узнали о вирусах. Выберите один правильный ответ для каждого вопроса.</p>
+                        
+                        <div class="quiz-container">
+                            <div class="question">
+                                <h3>1. Вирусы - это:</h3>
+                                <div class="options">
+                                    <div class="option" onclick="selectAnswer(this, 'a', 0)">
+                                        <span class="option-emoji">🦠</span>
+                                        А) Живые организмы
+                                    </div>
+                                    <div class="option" onclick="selectAnswer(this, 'b', 0)">
+                                        <span class="option-emoji">🧬</span>
+                                        Б) Неклеточные формы жизни
+                                    </div>
+                                    <div class="option" onclick="selectAnswer(this, 'c', 0)">
+                                        <span class="option-emoji">🦠</span>
+                                        В) Бактерии
+                                    </div>
+                                    <div class="option" onclick="selectAnswer(this, 'd', 0)">
+                                        <span class="option-emoji">🌿</span>
+                                        Г) Растения
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="question">
+                                <h3>2. Что вирусы используют для размножения?</h3>
+                                <div class="options">
+                                    <div class="option" onclick="selectAnswer(this, 'a', 1)">
+                                        <span class="option-emoji">☀️</span>
+                                        А) Солнечный свет
+                                    </div>
+                                    <div class="option" onclick="selectAnswer(this, 'b', 1)">
+                                        <span class="option-emoji">🦠</span>
+                                        Б) Другие вирусы
+                                    </div>
+                                    <div class="option" onclick="selectAnswer(this, 'c', 1)">
+                                        <span class="option-emoji">🧫</span>
+                                        В) Ресурсы живой клетки
+                                    </div>
+                                    <div class="option" onclick="selectAnswer(this, 'd', 1)">
+                                        <span class="option-emoji">🌱</span>
+                                        Г) Почву и воду
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="question">
+                                <h3>3. Как называется защитная оболочка вируса?</h3>
+                                <div class="options">
+                                    <div class="option" onclick="selectAnswer(this, 'a', 2)">
+                                        <span class="option-emoji">🧫</span>
+                                        А) Мембрана
+                                    </div>
+                                    <div class="option" onclick="selectAnswer(this, 'b', 2)">
+                                        <span class="option-emoji">🛡️</span>
+                                        Б) Капсид
+                                    </div>
+                                    <div class="option" onclick="selectAnswer(this, 'c', 2)">
+                                        <span class="option-emoji">🧱</span>
+                                        В) Клеточная стенка
+                                    </div>
+                                    <div class="option" onclick="selectAnswer(this, 'd', 2)">
+                                        <span class="option-emoji">📦</span>
+                                        Г) Оболочка
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="question">
+                                <h3>4. Вирусы, которые атакуют бактерии, называются:</h3>
+                                <div class="options">
+                                    <div class="option" onclick="selectAnswer(this, 'a', 3)">
+                                        <span class="option-emoji">🦠</span>
+                                        А) Бактериоциды
+                                    </div>
+                                    <div class="option" onclick="selectAnswer(this, 'b', 3)">
+                                        <span class="option-emoji">💊</span>
+                                        Б) Антибиотики
+                                    </div>
+                                    <div class="option" onclick="selectAnswer(this, 'c', 3)">
+                                        <span class="option-emoji">⚔️</span>
+                                        В) Бактериофаги
+                                    </div>
+                                    <div class="option" onclick="selectAnswer(this, 'd', 3)">
+                                        <span class="option-emoji">🧪</span>
+                                        Г) Бактериолизины
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="question">
+                                <h3>5. Как организм защищается от вирусов?</h3>
+                                <div class="options">
+                                    <div class="option" onclick="selectAnswer(this, 'a', 4)">
+                                        <span class="option-emoji">🛡️</span>
+                                        А) С помощью иммунной системы
+                                    </div>
+                                    <div class="option" onclick="selectAnswer(this, 'b', 4)">
+                                        <span class="option-emoji">🌡️</span>
+                                        Б) Увеличивает температуру тела
+                                    </div>
+                                    <div class="option" onclick="selectAnswer(this, 'c', 4)">
+                                        <span class="option-emoji">🧬</span>
+                                        В) Вырабатывает антитела
+                                    </div>
+                                    <div class="option" onclick="selectAnswer(this, 'd', 4)">
+                                        <span class="option-emoji">✅</span>
+                                        Г) Все ответы верны
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="quiz-buttons">
+                                <button class="btn btn-secondary" onclick="resetQuiz()">
+                                    Сбросить ответы
+                                </button>
+                                <button class="btn btn-primary" onclick="checkQuiz()">
+                                    Завершить тест
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Слайд 10: Результаты -->
+            <div class="slide" id="slide10">
+                <div class="slide-content">
+                    <h1 class="slide-title">
+                        <span class="slide-number">10</span>
+                        Результаты и выводы
+                    </h1>
+                    <div class="slide-body animate-in">
+                        <div class="result" id="quizResult">
+                            <h2>Результаты теста</h2>
+                            <p>Вы ответили на <span id="correctCount">0</span> из 5 вопросов правильно</p>
+                            <div class="score" id="scoreDisplay">0%</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progressFill"></div>
+                            </div>
+                            <p id="resultMessage"></p>
+                            <button class="btn btn-primary" onclick="resetQuiz()">
+                                Пройти тест снова
+                            </button>
+                        </div>
+                        
+                        <div style="margin-top: 25px;">
+                            <h3>Выводы из урока:</h3>
+                            <ul>
+                                <li>Вирусы - это неклеточные формы жизни, которые могут размножаться только внутри живых клеток</li>
+                                <li>Вирусы имеют простое строение: генетический материал и белковая оболочка</li>
+                                <li>Вирусы бывают разными: одни вызывают болезни, другие могут быть полезными</li>
+                                <li>Организм защищается от вирусов с помощью иммунной системы</li>
+                                <li>Люди создали вакцины и другие способы защиты от вирусных заболеваний</li>
+                            </ul>
+                            
+                            <div class="highlight" style="margin-top: 20px;">
+                                <p>Вирусы - удивительная часть живой природы, которая показывает, насколько разнообразна жизнь на нашей планете!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="prevSlide()" disabled>
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            
+            <div class="slide-indicators" id="slideIndicators">
+                <!-- Индикаторы будут добавлены через JS -->
+            </div>
+            
+            <button class="nav-btn" id="nextBtn" onclick="nextSlide()">
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Управление презентацией
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        let currentSlide = 0;
+        
+        // Инициализация индикаторов
+        const slideIndicators = document.getElementById('slideIndicators');
+        for (let i = 0; i < totalSlides; i++) {
+            const indicator = document.createElement('div');
+            indicator.className = 'slide-indicator';
+            if (i === 0) indicator.classList.add('active');
+            indicator.setAttribute('data-slide', i);
+            indicator.addEventListener('click', () => goToSlide(i));
+            slideIndicators.appendChild(indicator);
+        }
+        
+        // Обновление навигации
+        function updateNavigation() {
+            document.getElementById('prevBtn').disabled = currentSlide === 0;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+            
+            // Обновление индикаторов
+            document.querySelectorAll('.slide-indicator').forEach((indicator, index) => {
+                if (index === currentSlide) {
+                    indicator.classList.add('active');
+                } else {
+                    indicator.classList.remove('active');
+                }
+            });
+        }
+        
+        // Переход к слайду
+        function goToSlide(slideIndex) {
+            // Проверяем, что слайд существует
+            if (slideIndex < 0 || slideIndex >= totalSlides) return;
+            
+            // Убираем класс active у текущего слайда
+            slides[currentSlide].classList.remove('active');
+            slides[currentSlide].classList.add('previous');
+            
+            // Добавляем класс active новому слайду
+            slides[slideIndex].classList.remove('previous');
+            slides[slideIndex].classList.add('active');
+            
+            // Обновляем текущий слайд
+            currentSlide = slideIndex;
+            
+            // Обновляем навигацию
+            updateNavigation();
+            
+            // Обновляем анимации на активном слайде
+            const animatedElements = slides[currentSlide].querySelectorAll('.animate-in');
+            animatedElements.forEach(el => {
+                el.style.animation = 'none';
+                void el.offsetWidth; // Сброс анимации
+                el.style.animation = null;
+            });
+        }
+        
+        // Следующий слайд
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                goToSlide(currentSlide + 1);
+            }
+        }
+        
+        // Предыдущий слайд
+        function prevSlide() {
+            if (currentSlide > 0) {
+                goToSlide(currentSlide - 1);
+            }
+        }
+        
+        // Управление с клавиатуры
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+                nextSlide();
+                e.preventDefault();
+            } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                prevSlide();
+                e.preventDefault();
+            }
+        });
+        
+        // Таймер урока
+        let minutes = 45;
+        let seconds = 0;
+        let timerInterval;
+        
+        function updateTimer() {
+            const minutesElement = document.getElementById('minutes');
+            const secondsElement = document.getElementById('seconds');
+            
+            minutesElement.textContent = minutes < 10 ? '0' + minutes : minutes;
+            secondsElement.textContent = seconds < 10 ? '0' + seconds : seconds;
+            
+            if (minutes === 0 && seconds === 0) {
+                clearInterval(timerInterval);
+                alert("Время урока истекло! Завершите презентацию.");
+                return;
+            }
+            
+            if (seconds === 0) {
+                minutes--;
+                seconds = 59;
+            } else {
+                seconds--;
+            }
+        }
+        
+        // Запуск таймера
+        timerInterval = setInterval(updateTimer, 1000);
+        
+        // Загрузка фотографий
+        function handlePhotoUpload(input, photoId) {
+            const file = input.files[0];
+            if (!file) return;
+            
+            // Проверяем тип файла
+            if (!file.type.match('image.*')) {
+                alert('Пожалуйста, выберите изображение (JPEG, PNG, GIF и т.д.)');
+                return;
+            }
+            
+            // Проверяем размер файла (максимум 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('Файл слишком большой. Максимальный размер - 5MB');
+                return;
+            }
+            
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                const photoContainer = document.getElementById(photoId);
+                const img = photoContainer.querySelector('.uploaded-photo');
+                
+                // Устанавливаем загруженное изображение
+                img.src = e.target.result;
+                
+                // Показываем изображение и скрываем иконку загрузки
+                photoContainer.classList.add('uploaded');
+                
+                // Сохраняем в localStorage для сохранения между перезагрузками
+                try {
+                    const uploadedPhotos = JSON.parse(localStorage.getItem('virusPresentationPhotos') || '{}');
+                    uploadedPhotos[photoId] = e.target.result;
+                    localStorage.setItem('virusPresentationPhotos', JSON.stringify(uploadedPhotos));
+                } catch (e) {
+                    console.error('Не удалось сохранить фото:', e);
+                }
+            };
+            
+            reader.onerror = function() {
+                alert('Ошибка при загрузке файла. Попробуйте другой файл.');
+            };
+            
+            reader.readAsDataURL(file);
+        }
+        
+        // Восстановление загруженных фото при загрузке страницы
+        function restoreUploadedPhotos() {
+            try {
+                const uploadedPhotos = JSON.parse(localStorage.getItem('virusPresentationPhotos') || '{}');
+                
+                for (const photoId in uploadedPhotos) {
+                    const photoContainer = document.getElementById(photoId);
+                    if (photoContainer) {
+                        const img = photoContainer.querySelector('.uploaded-photo');
+                        if (img) {
+                            img.src = uploadedPhotos[photoId];
+                            photoContainer.classList.add('uploaded');
+                        }
+                    }
+                }
+            } catch (e) {
+                console.error('Не удалось восстановить загруженные фото:', e);
+            }
+        }
+        
+        // Очистка всех загруженных фото
+        function clearAllPhotos() {
+            if (confirm('Вы уверены, что хотите удалить все загруженные фотографии?')) {
+                localStorage.removeItem('virusPresentationPhotos');
+                document.querySelectorAll('.photo-upload').forEach(container => {
+                    container.classList.remove('uploaded');
+                    const img = container.querySelector('.uploaded-photo');
+                    if (img) img.src = '';
+                });
+            }
+        }
+        
+        // Тест
+        const correctAnswers = ['b', 'c', 'b', 'c', 'd'];
+        let userAnswers = ['', '', '', '', ''];
+        
+        function selectAnswer(element, answer, questionIndex) {
+            // Снимаем выделение с других вариантов в этом вопросе
+            const options = element.parentNode.querySelectorAll('.option');
+            options.forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Выделяем выбранный вариант
+            element.classList.add('selected');
+            
+            // Сохраняем ответ пользователя
+            userAnswers[questionIndex] = answer;
+        }
+        
+        function checkQuiz() {
+            // Проверяем, все ли вопросы отвечены
+            const unanswered = userAnswers.filter(answer => answer === '').length;
+            if (unanswered > 0) {
+                if (!confirm(`Вы ответили не на все вопросы (${unanswered} осталось). Завершить тест все равно?`)) {
+                    return;
+                }
+            }
+            
+            let correctCount = 0;
+            
+            // Проверяем ответы
+            for (let i = 0; i < correctAnswers.length; i++) {
+                const questionElement = document.querySelectorAll('.question')[i];
+                const options = questionElement.querySelectorAll('.option');
+                
+                // Снимаем все классы
+                options.forEach(opt => {
+                    opt.classList.remove('correct', 'incorrect');
+                });
+                
+                // Отмечаем правильный ответ
+                const correctOption = questionElement.querySelector(`.option:nth-child(${correctAnswers[i].charCodeAt(0) - 96 + 1})`);
+                if (correctOption) correctOption.classList.add('correct');
+                
+                // Отмечаем неправильный ответ пользователя, если есть
+                if (userAnswers[i] && userAnswers[i] !== correctAnswers[i]) {
+                    const userOptionIndex = userAnswers[i].charCodeAt(0) - 96 + 1;
+                    const userOption = questionElement.querySelector(`.option:nth-child(${userOptionIndex})`);
+                    if (userOption) userOption.classList.add('incorrect');
+                }
+                
+                // Считаем правильные ответы
+                if (userAnswers[i] === correctAnswers[i]) {
+                    correctCount++;
+                }
+            }
+            
+            // Показываем результаты
+            const percentage = Math.round((correctCount / correctAnswers.length) * 100);
+            document.getElementById('correctCount').textContent = correctCount;
+            document.getElementById('scoreDisplay').textContent = percentage + '%';
+            document.getElementById('progressFill').style.width = percentage + '%';
+            
+            // Сообщение в зависимости от результата
+            let message = '';
+            if (percentage === 100) {
+                message = 'Отлично! Ты прекрасно усвоил материал о вирусах!';
+            } else if (percentage >= 70) {
+                message = 'Хорошо! Ты хорошо разобрался в теме вирусов!';
+            } else if (percentage >= 50) {
+                message = 'Неплохо, но стоит повторить материал о вирусах.';
+            } else {
+                message = 'Тебе стоит еще раз изучить материал о вирусах.';
+            }
+            
+            document.getElementById('resultMessage').textContent = message;
+            
+            // Переходим к последнему слайду с результатами
+            goToSlide(9);
+        }
+        
+        function resetQuiz() {
+            userAnswers = ['', '', '', '', ''];
+            
+            // Сбрасываем выделение
+            const options = document.querySelectorAll('.option');
+            options.forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Возвращаемся к слайду с тестом
+            goToSlide(8);
+        }
+        
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            updateNavigation();
+            restoreUploadedPhotos();
+            
+            // Добавляем кнопку очистки фото на слайд с галереей
+            const gallerySlide = document.querySelector('#slide6 .slide-body');
+            const clearButton = document.createElement('button');
+            clearButton.className = 'btn btn-secondary';
+            clearButton.innerHTML = 'Очистить все фото';
+            clearButton.onclick = clearAllPhotos;
+            clearButton.style.marginTop = '15px';
+            
+            const highlightDiv = gallerySlide.querySelector('.highlight');
+            if (highlightDiv) {
+                highlightDiv.parentNode.insertBefore(clearButton, highlightDiv.nextSibling);
+            }
+        });
+    </script>
+</body>
+</html>
